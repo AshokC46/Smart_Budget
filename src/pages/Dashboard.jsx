@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../api/axiosInstance";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -21,26 +20,13 @@ import {
   Legend,
 } from "recharts";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const transactions = useSelector((state) => state.transactions.list);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axiosInstance.get("/transactions");
-        setTransactions(res.data);
-      } catch (err) {
-        console.error("Error fetching transactions:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <CircularProgress />;
+  if (!transactions || transactions.length === 0)
+    return <CircularProgress color="success" />;
 
   const income = transactions
     .filter((t) => t.type === "Income")
@@ -74,9 +60,9 @@ const Dashboard = () => {
     "Dec",
   ];
 
-  const barData = months.map((month) => {
+  const barData = months.map((month, i) => {
     const monthTxns = transactions.filter(
-      (t) => new Date(t.date).getMonth() === months.indexOf(month)
+      (t) => new Date(t.date).getMonth() === i
     );
     const totalIncome = monthTxns
       .filter((t) => t.type === "Income")

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axiosInstance from "../api/axiosInstance";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,9 +23,13 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { addTransaction, deleteTransaction } from "../redux/transactionsSlice";
 
 const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
+  const transactions = useSelector((state) => state.transactions.list);
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -36,45 +39,24 @@ const Transactions = () => {
     amount: "",
     type: "Income",
   });
-
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
 
-  const fetchTransactions = async () => {
-    try {
-      const res = await axiosInstance.get("/transactions");
-      setTransactions(res.data);
-    } catch (err) {
-      toast.error("Failed to load transactions!");
-    }
-  };
-
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!form.date || !form.title || !form.amount) {
       toast.error("Please fill all fields!");
       return;
     }
 
-    try {
-      const res = await axiosInstance.post("/transactions", {
-        ...form,
-        amount: Number(form.amount),
-      });
-      setTransactions([...transactions, res.data]);
-      setForm({ date: "", title: "", amount: "", type: "Income" });
-      setOpen(false);
-      toast.success("Transaction added successfully!");
-    } catch (err) {
-      toast.error("Error adding transaction!");
-    }
+    const newTxn = {
+      id: Date.now(),
+      ...form,
+      amount: Number(form.amount),
+    };
+    dispatch(addTransaction(newTxn));
+    setForm({ date: "", title: "", amount: "", type: "Income" });
+    setOpen(false);
+    toast.success("Transaction added!");
   };
 
   const confirmDelete = (id) => {
@@ -82,15 +64,10 @@ const Transactions = () => {
     setDeleteOpen(true);
   };
 
-  const handleDelete = async () => {
-    try {
-      await axiosInstance.delete(`/transactions/${selectedId}`);
-      setTransactions(transactions.filter((t) => t.id !== selectedId));
-      setDeleteOpen(false);
-      toast.success("Transaction deleted!");
-    } catch (err) {
-      toast.error("Error deleting transaction!");
-    }
+  const handleDelete = () => {
+    dispatch(deleteTransaction(selectedId));
+    setDeleteOpen(false);
+    toast.success("Transaction deleted!");
   };
 
   const filteredTransactions = transactions.filter((txn) => {
@@ -100,6 +77,9 @@ const Transactions = () => {
       txn.amount.toString().includes(searchTerm);
     return matchType && matchSearch;
   });
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
     <div>
@@ -248,9 +228,9 @@ const Transactions = () => {
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
           <Button
-            onClick={handleAdd}
             variant="contained"
             sx={{ backgroundColor: "#0d9488" }}
+            onClick={handleAdd}
           >
             Add
           </Button>
