@@ -1,0 +1,46 @@
+{
+  "transactions": [
+    {
+      "id": "1",
+      "date": "2025-10-01",
+      "title": "Salary",
+      "amount": 50000,
+      "type": "Income"
+    },
+    {
+      "id": "2",
+      "date": "2025-10-05",
+      "title": "Groceries",
+      "amount": 3000,
+      "type": "Expense"
+    },
+    {
+      "id": "3",
+      "date": "2025-10-10",
+      "title": "Electric Bill",
+      "amount": 1200,
+      "type": "Expense"
+    },
+    {
+      "id": "fe6c",
+      "date": "2025-10-07",
+      "title": "Shopping",
+      "amount": 10000,
+      "type": "Expense"
+    },
+    {
+      "id": "ac5f",
+      "date": "2025-10-12",
+      "title": "Tour",
+      "amount": 15000,
+      "type": "Expense"
+    },
+    {
+      "id": "5f2a",
+      "date": "2025-10-11",
+      "title": "Transport",
+      "amount": 1500,
+      "type": "Expense"
+    }
+  ]
+}
