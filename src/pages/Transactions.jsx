@@ -18,6 +18,8 @@ import {
   IconButton,
   Grid,
   InputAdornment,
+  Paper,
+  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -29,6 +31,7 @@ import { addTransaction, deleteTransaction } from "../redux/transactionsSlice";
 const Transactions = () => {
   const transactions = useSelector((state) => state.transactions.list);
   const dispatch = useDispatch();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -85,6 +88,7 @@ const Transactions = () => {
     <div>
       <h1 className="text-2xl font-semibold mb-6">Transactions</h1>
 
+      {/* Search & Filter */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} md={8}>
           <TextField
@@ -116,57 +120,128 @@ const Transactions = () => {
         </Grid>
       </Grid>
 
+      {/* Responsive Section */}
       <Card className="shadow-md">
         <CardContent sx={{ overflowX: "auto" }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Amount (₹)</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+          {isMobile ? (
+            // --------- Mobile Card Layout ---------
+            <Grid container spacing={2}>
               {filteredTransactions.length > 0 ? (
                 filteredTransactions.map((txn) => (
-                  <TableRow key={txn.id} hover>
-                    <TableCell>{txn.date}</TableCell>
-                    <TableCell>{txn.title}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-1 py-1 rounded-full text-sm font-medium ${
-                          txn.type === "Income"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {txn.type}
-                      </span>
-                    </TableCell>
-                    <TableCell>{txn.amount.toLocaleString()}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => confirmDelete(txn.id)}>
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                  <Grid item xs={12} key={txn.id}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        borderRadius: 2,
+                        backgroundColor: "#f9fafb",
+                        "&:hover": { boxShadow: 3 },
+                      }}
+                    >
+                      <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                          <strong>Date:</strong>
+                        </Grid>
+                        <Grid item xs={6}>
+                          {txn.date}
+                        </Grid>
+
+                        <Grid item xs={6}>
+                          <strong>Title:</strong>
+                        </Grid>
+                        <Grid item xs={6}>
+                          {txn.title}
+                        </Grid>
+
+                        <Grid item xs={6}>
+                          <strong>Type:</strong>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-sm font-medium ${
+                              txn.type === "Income"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {txn.type}
+                          </span>
+                        </Grid>
+
+                        <Grid item xs={6}>
+                          <strong>Amount:</strong>
+                        </Grid>
+                        <Grid item xs={6}>
+                          ₹{txn.amount.toLocaleString()}
+                        </Grid>
+
+                        <Grid item xs={12} className="flex justify-end">
+                          <IconButton onClick={() => confirmDelete(txn.id)}>
+                            <DeleteIcon color="error" />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
-                    <span className="text-gray-500 italic">
-                      No matching transactions found.
-                    </span>
-                  </TableCell>
-                </TableRow>
+                <p className="text-center text-gray-500 italic py-6">
+                  No matching transactions found.
+                </p>
               )}
-            </TableBody>
-          </Table>
+            </Grid>
+          ) : (
+            // --------- Desktop Table Layout ---------
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Amount (₹)</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((txn) => (
+                    <TableRow key={txn.id} hover>
+                      <TableCell>{txn.date}</TableCell>
+                      <TableCell>{txn.title}</TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-1 py-1 rounded-full text-sm font-medium ${
+                            txn.type === "Income"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {txn.type}
+                        </span>
+                      </TableCell>
+                      <TableCell>{txn.amount.toLocaleString()}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => confirmDelete(txn.id)}>
+                          <DeleteIcon color="error" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                      <span className="text-gray-500 italic">
+                        No matching transactions found.
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
+      {/* Floating Add Button */}
       <Fab
         color="primary"
         onClick={() => setOpen(true)}
@@ -180,12 +255,8 @@ const Transactions = () => {
         <AddIcon />
       </Fab>
 
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Add Transaction</DialogTitle>
         <DialogContent className="space-y-4 mt-2">
           <TextField
@@ -196,6 +267,7 @@ const Transactions = () => {
             value={form.date}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
+            sx={{ mt: 2 }}
           />
           <TextField
             fullWidth
@@ -203,6 +275,7 @@ const Transactions = () => {
             name="title"
             value={form.title}
             onChange={handleChange}
+            sx={{ mt: 2 }}
           />
           <TextField
             fullWidth
@@ -211,6 +284,7 @@ const Transactions = () => {
             type="number"
             value={form.amount}
             onChange={handleChange}
+            sx={{ mt: 2 }}
           />
           <TextField
             select
@@ -219,6 +293,7 @@ const Transactions = () => {
             name="type"
             value={form.type}
             onChange={handleChange}
+            sx={{ mt: 2 }}
           >
             <MenuItem value="Income">Income</MenuItem>
             <MenuItem value="Expense">Expense</MenuItem>
@@ -237,6 +312,7 @@ const Transactions = () => {
         </DialogActions>
       </Dialog>
 
+      
       <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
         <DialogTitle>Delete Transaction?</DialogTitle>
         <DialogContent>

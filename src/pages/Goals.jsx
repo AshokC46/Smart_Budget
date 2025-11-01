@@ -158,6 +158,7 @@ const Goals = () => {
             fullWidth
             value={newGoal.title}
             onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
+            sx={{ mt: 2 }}
           />
           <TextField
             label="Target Amount (₹)"
@@ -165,6 +166,7 @@ const Goals = () => {
             fullWidth
             value={newGoal.target}
             onChange={(e) => setNewGoal({ ...newGoal, target: e.target.value })}
+            sx={{ mt: 2 }}
           />
           <TextField
             label="Amount Saved (₹)"
@@ -172,6 +174,7 @@ const Goals = () => {
             fullWidth
             value={newGoal.saved}
             onChange={(e) => setNewGoal({ ...newGoal, saved: e.target.value })}
+            sx={{ mt: 2 }}
           />
         </DialogContent>
         <DialogActions>
