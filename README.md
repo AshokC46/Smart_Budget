@@ -32,7 +32,7 @@ It’s designed to make money management simple, visual, and efficient — perfe
 
 ## 🚀 Live Demo
 
-🔗 **View Website:** [Smart Budget on GitHub Pages](https://AshokC46.github.io/SmartBudget)
+🔗 **View Website:** [Smart Budget on GitHub Pages](https://ashokc46.github.io/Smart_Budget/)
 
 ---
 
@@ -121,7 +121,7 @@ This automatically publishes your `/dist` build to the `gh-pages` branch.
 
 **Ashok C**
 Front-End React Developer | Skilled in Redux, Tailwind, Material UI & REST APIs
-📫 Connect on [LinkedIn](https://linkedin.com/in/ashokc46)
+📫 Connect on [LinkedIn](https://linkedin.com/in/ashokchavala)
 
 ---
 
