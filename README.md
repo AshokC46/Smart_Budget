@@ -111,9 +111,10 @@ This automatically publishes your `/dist` build to the `gh-pages` branch.
 
 ## 📸 Screenshots
 
-| Dashboard                                                        | Transactions                                                           |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ![Dashboard](https://via.placeholder.com/400x200?text=Dashboard) | ![Transactions](https://via.placeholder.com/400x200?text=Transactions) |
+ Dashboard                                                                                     
+ <img width="1918" height="867" alt="Smart budget app" src="https://github.com/user-attachments/assets/ad6c2d1d-1c77-48dd-8bcf-7c7801ee3bd2" />
+ Transactions <img width="1920" height="874" alt="Smart budget appp" src="https://github.com/user-attachments/assets/42d6e3f5-b69f-4928-80b4-14168652c170" />
+
 
 ---
 
